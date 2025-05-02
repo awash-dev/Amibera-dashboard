@@ -51,7 +51,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { CalendarIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import { Calendar1Icon } from "lucide-react";
 
@@ -685,7 +684,7 @@ export default function Dashboard() {
                               variant={
                                 order.status === "Delivered"
                                   ? "default"
-                                  : order.status === "Shipped"
+                                  : order.status === "Failed"
                                   ? "secondary"
                                   : "destructive"
                               }
@@ -829,7 +828,7 @@ export default function Dashboard() {
                   <TableHeader>
                     <TableRow>
                       <TableHead>Product</TableHead>
-                      <TableHead>Image</TableHead>
+                      <TableHead> </TableHead>
                       <TableHead>Price</TableHead>
                       <TableHead>Category</TableHead>
                     </TableRow>
@@ -843,15 +842,7 @@ export default function Dashboard() {
                           </TableCell>
                           <TableCell>
                             <div className="h-10 w-10 overflow-hidden rounded-md">
-                              <img
-                                src={product.imageUrl}
-                                alt={product.name}
-                                className="h-full w-full object-cover"
-                                onError={(e) => {
-                                  (e.target as HTMLImageElement).src =
-                                    "/placeholder-product.png";
-                                }}
-                              />
+                            
                             </div>
                           </TableCell>
                           <TableCell>{product.price.toFixed(2)} Birr</TableCell>
@@ -896,7 +887,7 @@ export default function Dashboard() {
                     <SelectContent>
                       <SelectItem value="all">All Statuses</SelectItem>
                       <SelectItem value="Pending">Pending</SelectItem>
-                      <SelectItem value="Shipped">Shipped</SelectItem>
+                      <SelectItem value="Failed">Failed</SelectItem>
                       <SelectItem value="Delivered">Delivered</SelectItem>
                     </SelectContent>
                   </Select>
@@ -920,7 +911,7 @@ export default function Dashboard() {
                               variant={
                                 order.status === "Delivered"
                                   ? "default"
-                                  : order.status === "Shipped"
+                                  : order.status === "Failed"
                                   ? "secondary"
                                   : "destructive"
                               }

@@ -267,7 +267,7 @@ export default function OrderList() {
                       </div>
                     </TableCell>
                     <TableCell className="font-medium">
-                      ${order.totalAmount.toFixed(2)}
+                      {order.totalAmount.toFixed(2)} birr
                     </TableCell>
                     <TableCell>
                       <Select

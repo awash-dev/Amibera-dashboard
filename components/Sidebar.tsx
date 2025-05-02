@@ -92,7 +92,7 @@ export default function SidebarNavigation() {
 
             {isCollapsed && (
               <div className="flex justify-center w-full">
-                <Package className="h-6 w-6 text-primary" />
+                <ShoppingBag className="h-6 w-6 text-primary" />
               </div>
             )}
 
@@ -146,7 +146,7 @@ export default function SidebarNavigation() {
             {!isCollapsed && (
               <div className="text-sm">
                 <div className="font-medium">Mohammed</div>
-                <div className="text-muted-foreground">mohammed.coin.et@gmail.com</div>
+                <div className="text-muted-foreground">mohammed.admin@gmail.com</div>
               </div>
             )}
 
