@@ -19,14 +19,7 @@ import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
-import {
-  ChevronLeft,
-  Circle,
-  Phone,
-  Plus,
-  Send,
-  User2Icon,
-} from "lucide-react";
+import { ChevronLeft, Circle, Plus, Send, User2Icon } from "lucide-react";
 
 interface UserData {
   uid: string;
@@ -60,13 +53,12 @@ export default function UserChats() {
     uid: "hQHGe8bnQ1TmJLFPrkf1DSfqId93",
     email: "mohammed.admin@gmail.com",
   };
+
   const [users, setUsers] = useState<UserData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filteredUsers, setFilteredUsers] = useState<UserData[]>([]);
-  const [selectedChatUser, setSelectedChatUser] = useState<UserData | null>(
-    null
-  );
+  const [selectedChatUser, setSelectedChatUser] = useState<UserData | null>(null);
   const [isDesktop, setIsDesktop] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
@@ -78,14 +70,11 @@ export default function UserChats() {
   useEffect(() => {
     fetchAllUsers();
     fetchChats();
-
     const handleResize = () => {
       setIsDesktop(window.innerWidth >= 768);
     };
-
     handleResize();
     window.addEventListener("resize", handleResize);
-
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
@@ -139,11 +128,13 @@ export default function UserChats() {
         chatsCollectionRef,
         where("users", "array-contains", currentUser.uid)
       );
+
       onSnapshot(chatsQuery, (snapshot) => {
         const chatsList = snapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         })) as Chat[];
+
         setChats(chatsList);
       });
     } catch (error) {
@@ -193,24 +184,6 @@ export default function UserChats() {
     }); // Use hour12: true for 12-hour format
   };
 
-  const formatDate = (timestamp: any) => {
-    if (!timestamp) return "";
-    const date = timestamp.toDate(); // Convert Firestore Timestamp to Date
-    const today = new Date();
-
-    if (date.toDateString() === today.toDateString()) {
-      return formatTimestamp(timestamp);
-    } else if (date.getFullYear() === today.getFullYear()) {
-      return date.toLocaleDateString([], { month: "short", day: "numeric" });
-    } else {
-      return date.toLocaleDateString([], {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      });
-    }
-  };
-
   const handleUserClick = (user: UserData) => {
     setSelectedChatUser(user);
   };
@@ -221,7 +194,7 @@ export default function UserChats() {
       return;
     }
     try {
-      const chatPath = `chats/${chatId}/messages`;
+      const chatPath = "chats";
       const messagesCollectionRef = collection(FIREBASE_Db, chatPath);
       const messagesQuery = query(messagesCollectionRef, orderBy("createdAt"));
 
@@ -230,11 +203,8 @@ export default function UserChats() {
           id: doc.id,
           ...doc.data(),
         })) as Message[];
-        // Filter messages where senderId equals receiverId
-        const selfMessages = newMessages.filter(
-          (msg) => msg.senderId === msg.receiverId
-        );
-        setMessages(selfMessages);
+
+        setMessages(newMessages);
       });
     } catch (error) {
       console.error("Error fetching messages:", error);
@@ -243,16 +213,11 @@ export default function UserChats() {
   };
 
   const sendMessage = async () => {
-    if (
-      newMessage.trim() &&
-      currentUser?.uid &&
-      selectedChatUser?.uid &&
-      activeChatId
-    ) {
+    if (newMessage.trim() && currentUser?.uid && selectedChatUser?.uid && activeChatId) {
       try {
         const senderId = currentUser.uid;
         const receiverId = selectedChatUser.uid;
-        const chatPath = `chats/${activeChatId}/messages`;
+        const chatPath = "chats";
         const messagesCollectionRef = collection(FIREBASE_Db, chatPath);
 
         const messageData = {
@@ -265,6 +230,19 @@ export default function UserChats() {
 
         const docRef = await addDoc(messagesCollectionRef, messageData);
         console.log("Message sent with ID:", docRef.id);
+
+        // Add the "use client" message to the messages state
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          {
+            id: docRef.id,
+            senderId,
+            receiverId,
+            text: "use client", // This is the message you want to display
+            email: currentUser.email,
+            createdAt: new Date(), // Use the current date for display
+          },
+        ]);
 
         setNewMessage("");
       } catch (error) {
@@ -290,10 +268,7 @@ export default function UserChats() {
       <div className="w-full h-screen flex items-center justify-center bg-background">
         <div className="space-y-4 w-full max-w-md">
           {[...Array(7)].map((_, i) => (
-            <div
-              key={i}
-              className="flex items-center space-x-4 p-4 rounded-lg bg-muted/50 w-full"
-            >
+            <div key={i} className="flex items-center space-x-4 p-4 rounded-lg bg-muted/50 w-full">
               <Skeleton className="h-12 w-12 rounded-full" />
               <div className="flex-1 space-y-2">
                 <Skeleton className="h-4 w-32" />
@@ -468,7 +443,6 @@ export default function UserChats() {
                       <p>{msg.text}</p>
                       <p className="text-xs text-primary-10 text-right mt-1">
                         {formatTimestamp(msg.createdAt)}{" "}
-                        {/* Format timestamp */}
                       </p>
                     </div>
                   </div>
