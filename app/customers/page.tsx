@@ -19,14 +19,7 @@ import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
-import {
-  ChevronLeft,
-  Circle,
-  Phone,
-  Plus,
-  Send,
-  User2Icon,
-} from "lucide-react";
+import { ChevronLeft, Circle, Plus, Send, User2Icon } from "lucide-react";
 
 interface UserData {
   uid: string;
@@ -60,6 +53,7 @@ export default function UserChats() {
     uid: "hQHGe8bnQ1TmJLFPrkf1DSfqId93",
     email: "mohammed.admin@gmail.com",
   };
+
   const [users, setUsers] = useState<UserData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -185,30 +179,23 @@ export default function UserChats() {
 
   const formatTimestamp = (timestamp: any) => {
     if (!timestamp) return "";
-    const date = timestamp.toDate(); // Convert Firestore Timestamp to Date
-    return date.toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
-    }); // Use hour12: true for 12-hour format
-  };
-
-  const formatDate = (timestamp: any) => {
-    if (!timestamp) return "";
-    const date = timestamp.toDate(); // Convert Firestore Timestamp to Date
-    const today = new Date();
-
-    if (date.toDateString() === today.toDateString()) {
-      return formatTimestamp(timestamp);
-    } else if (date.getFullYear() === today.getFullYear()) {
-      return date.toLocaleDateString([], { month: "short", day: "numeric" });
-    } else {
-      return date.toLocaleDateString([], {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
+    // Check if timestamp is a Firestore Timestamp
+    if (timestamp.toDate) {
+      const date = timestamp.toDate(); // Convert Firestore Timestamp to Date
+      return date.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      });
+    } else if (timestamp instanceof Date) {
+      // If it's already a Date object
+      return timestamp.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
       });
     }
+    return ""; // Return empty string if timestamp is of an unexpected type
   };
 
   const handleUserClick = (user: UserData) => {
@@ -221,7 +208,7 @@ export default function UserChats() {
       return;
     }
     try {
-      const chatPath = `chats/${chatId}/messages`;
+      const chatPath = "chats";
       const messagesCollectionRef = collection(FIREBASE_Db, chatPath);
       const messagesQuery = query(messagesCollectionRef, orderBy("createdAt"));
 
@@ -230,11 +217,15 @@ export default function UserChats() {
           id: doc.id,
           ...doc.data(),
         })) as Message[];
-        // Filter messages where senderId equals receiverId
-        const selfMessages = newMessages.filter(
-          (msg) => msg.senderId === msg.receiverId
+
+        // Filter messages based on the selected chat user's email
+        const filteredMessages = newMessages.filter(
+          (msg) =>
+            (msg.senderId === currentUser.uid && msg.text === "use client") ||
+            (msg.email === selectedChatUser?.email &&
+              msg.senderId !== currentUser.uid)
         );
-        setMessages(selfMessages);
+        setMessages(filteredMessages);
       });
     } catch (error) {
       console.error("Error fetching messages:", error);
@@ -252,7 +243,7 @@ export default function UserChats() {
       try {
         const senderId = currentUser.uid;
         const receiverId = selectedChatUser.uid;
-        const chatPath = `chats/${activeChatId}/messages`;
+        const chatPath = "chats"; // Keep chatPath unchanged
         const messagesCollectionRef = collection(FIREBASE_Db, chatPath);
 
         const messageData = {
@@ -265,6 +256,19 @@ export default function UserChats() {
 
         const docRef = await addDoc(messagesCollectionRef, messageData);
         console.log("Message sent with ID:", docRef.id);
+
+        // Immediately update the local messages state to display the sent message
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          {
+            id: docRef.id,
+            senderId,
+            receiverId,
+            text: "use client", // Set the text to "use client"
+            email: currentUser.email, // Include the current user's email
+            createdAt: new Date(), // Use the current date for display
+          },
+        ]);
 
         setNewMessage("");
       } catch (error) {
@@ -467,8 +471,7 @@ export default function UserChats() {
                     >
                       <p>{msg.text}</p>
                       <p className="text-xs text-primary-10 text-right mt-1">
-                        {formatTimestamp(msg.createdAt)}{" "}
-                        {/* Format timestamp */}
+                        {formatTimestamp(msg.createdAt)}
                       </p>
                     </div>
                   </div>
@@ -476,6 +479,7 @@ export default function UserChats() {
                 <div ref={messagesEndRef} />
               </div>
             </ScrollArea>
+            
           </div>
 
           {/* Message Input */}
