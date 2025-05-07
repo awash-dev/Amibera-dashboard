@@ -56,7 +56,9 @@ export default function ProductList() {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isSliderOpen, setIsSliderOpen] = useState(false);
-  const [currentProductImages, setCurrentProductImages] = useState<string[]>([]);
+  const [currentProductImages, setCurrentProductImages] = useState<string[]>(
+    []
+  );
   const [showFilters, setShowFilters] = useState(false);
   const [categoryFilter, setCategoryFilter] = useState("");
 

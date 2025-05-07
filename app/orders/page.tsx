@@ -261,7 +261,7 @@ export default function OrderList() {
                       </Dialog>
                     </TableCell>
                     <TableCell>
-                      <div className="text-sm">{order.customer.phone}</div>
+                      ዐ<div className="text-sm">{order.customer.phone}</div>
                       <div className="text-sm text-muted-foreground">
                         {order.customer.email}
                       </div>

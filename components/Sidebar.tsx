@@ -146,7 +146,9 @@ export default function SidebarNavigation() {
             {!isCollapsed && (
               <div className="text-sm">
                 <div className="font-medium">Mohammed</div>
-                <div className="text-muted-foreground">mohammed.admin@gmail.com</div>
+                <div className="text-muted-foreground">
+                  mohammed.admin@gmail.com
+                </div>
               </div>
             )}
 

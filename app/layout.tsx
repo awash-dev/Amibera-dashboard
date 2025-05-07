@@ -47,7 +47,9 @@ export default function RootLayout({
   if (isLoading) {
     return (
       <html lang="en">
-        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
           <div className="flex items-center justify-center min-h-screen">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
           </div>
@@ -58,12 +60,16 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
         {isLoggedIn ? (
           <SidebarProvider>
             <div className="flex">
               <Sidebar />
-              <main className="flex-1 overflow-y-auto h-screen w-full">{children}</main>
+              <main className="flex-1 overflow-y-auto h-screen w-full">
+                {children}
+              </main>
             </div>
           </SidebarProvider>
         ) : (

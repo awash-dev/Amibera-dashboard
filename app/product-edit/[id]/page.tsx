@@ -4,7 +4,7 @@ import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { FIREBASE_Db, FIREBASE_Storage } from '@/FirebaseConfig';
+import { FIREBASE_Db, FIREBASE_Storage } from "@/FirebaseConfig";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
@@ -50,7 +50,7 @@ export default function UpdateProduct() {
   useEffect(() => {
     const fetchProduct = async () => {
       if (!id) return;
-      
+
       setLoading(true);
       try {
         const productDoc = doc(FIREBASE_Db, "products", id);
@@ -76,9 +76,11 @@ export default function UpdateProduct() {
     fetchProduct();
   }, [id, router]);
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -86,29 +88,29 @@ export default function UpdateProduct() {
       const files = Array.from(e.target.files);
       setNewImages(files);
       setHasImageChanged(true);
-      
+
       // Create previews for new images
-      const newPreviews = files.map(file => URL.createObjectURL(file));
-      setImagePreviews(prev => [...prev, ...newPreviews]);
+      const newPreviews = files.map((file) => URL.createObjectURL(file));
+      setImagePreviews((prev) => [...prev, ...newPreviews]);
     }
   };
 
   const removeImage = (index: number) => {
     setHasImageChanged(true);
     const isExistingImage = index < formData.image.length;
-    
-    setImagePreviews(prev => prev.filter((_, i) => i !== index));
-    
+
+    setImagePreviews((prev) => prev.filter((_, i) => i !== index));
+
     if (isExistingImage) {
       // If it's an existing image, remove from formData
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        image: prev.image.filter((_, i) => i !== index)
+        image: prev.image.filter((_, i) => i !== index),
       }));
     } else {
       // If it's a new image, remove from newImages
       const newIndex = index - formData.image.length;
-      setNewImages(prev => prev.filter((_, i) => i !== newIndex));
+      setNewImages((prev) => prev.filter((_, i) => i !== newIndex));
     }
   };
 
@@ -130,12 +132,15 @@ export default function UpdateProduct() {
 
     try {
       let uploadedImageUrls: string[] = [];
-      
+
       // Only upload new images if they were added
       if (hasImageChanged && newImages.length > 0) {
         uploadedImageUrls = await Promise.all(
           newImages.map(async (image) => {
-            const storageRef = ref(FIREBASE_Storage, `product-images/${Date.now()}-${image.name}`);
+            const storageRef = ref(
+              FIREBASE_Storage,
+              `product-images/${Date.now()}-${image.name}`
+            );
             await uploadBytes(storageRef, image);
             return await getDownloadURL(storageRef);
           })
@@ -143,8 +148,8 @@ export default function UpdateProduct() {
       }
 
       // Determine which images to keep
-      const finalImageUrls = hasImageChanged 
-        ? [...formData.image, ...uploadedImageUrls] 
+      const finalImageUrls = hasImageChanged
+        ? [...formData.image, ...uploadedImageUrls]
         : formData.image;
 
       // Update product in Firestore
@@ -171,10 +176,12 @@ export default function UpdateProduct() {
     <div className="container mx-auto py-8">
       <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-6">
         <h1 className="text-2xl font-bold mb-6">Edit Product</h1>
-        
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-1">Product Name</label>
+            <label className="block text-sm font-medium mb-1">
+              Product Name
+            </label>
             <Input
               name="name"
               value={formData.name}
@@ -208,7 +215,7 @@ export default function UpdateProduct() {
               required
             >
               <option value="">Select a category</option>
-              {categories.map(category => (
+              {categories.map((category) => (
                 <option key={category.value} value={category.value}>
                   {category.label}
                 </option>
@@ -217,7 +224,9 @@ export default function UpdateProduct() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Description</label>
+            <label className="block text-sm font-medium mb-1">
+              Description
+            </label>
             <textarea
               name="description"
               value={formData.description}
@@ -233,9 +242,9 @@ export default function UpdateProduct() {
               <div className="flex flex-wrap gap-2 mb-4">
                 {imagePreviews.map((preview, index) => (
                   <div key={index} className="relative">
-                    <img 
-                      src={preview} 
-                      alt={`Preview ${index}`} 
+                    <img
+                      src={preview}
+                      alt={`Preview ${index}`}
                       className="w-20 h-20 object-cover rounded-md"
                     />
                     <button
@@ -249,7 +258,7 @@ export default function UpdateProduct() {
                 ))}
               </div>
             )}
-            
+
             <Input
               type="file"
               onChange={handleFileChange}
@@ -258,7 +267,9 @@ export default function UpdateProduct() {
               className="cursor-pointer"
             />
             <p className="text-xs text-gray-500 mt-1">
-              {hasImageChanged ? "Changes to images will be saved" : "Upload new images to add to the existing ones"}
+              {hasImageChanged
+                ? "Changes to images will be saved"
+                : "Upload new images to add to the existing ones"}
             </p>
           </div>
 

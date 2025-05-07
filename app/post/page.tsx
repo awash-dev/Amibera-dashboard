@@ -6,8 +6,7 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { collection, addDoc } from "firebase/firestore";
 import { FIREBASE_Db, FIREBASE_Storage } from "@/FirebaseConfig";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input"; 
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -113,7 +112,7 @@ export default function CreateProduct() {
       });
 
       toast.success("Product created successfully!");
-      
+
       // Reset form
       setFormData({
         name: "",
@@ -143,7 +142,7 @@ export default function CreateProduct() {
   return (
     <div className="container mx-auto pl-32 py-8 max-w-2xl">
       <h1 className="text-2xl font-bold mb-6">Create New Product</h1>
-      
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="name">Product Name</Label>

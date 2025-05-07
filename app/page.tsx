@@ -43,7 +43,7 @@ export default function Login() {
         if (typeof window !== "undefined") {
           localStorage.setItem("token", "dummy_token"); // Save a dummy token to local storage
         }
-        
+
         // Simulate a loading duration before redirecting
         setTimeout(() => {
           setSuccess(true); // Set success message
@@ -64,7 +64,9 @@ export default function Login() {
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
         {error && <p className="text-red-600 mb-4 text-center">{error}</p>}
-        {success && <p className="text-green-600 mb-4 text-center">Login successful!</p>}
+        {success && (
+          <p className="text-green-600 mb-4 text-center">Login successful!</p>
+        )}
         <form onSubmit={handleSubmit} className="space-y-4 w-[350px] ">
           <div>
             <label htmlFor="email" className="block text-gray-700">

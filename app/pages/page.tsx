@@ -10,8 +10,6 @@ import {
 } from "firebase/firestore";
 import { FIREBASE_Db } from "@/FirebaseConfig";
 import {
-  BarChart,
-  Bar,
   PieChart,
   Pie,
   Cell,
@@ -841,9 +839,7 @@ export default function Dashboard() {
                             {product.name}
                           </TableCell>
                           <TableCell>
-                            <div className="h-10 w-10 overflow-hidden rounded-md">
-                            
-                            </div>
+                            <div className="h-10 w-10 overflow-hidden rounded-md"></div>
                           </TableCell>
                           <TableCell>{product.price.toFixed(2)} Birr</TableCell>
                           <TableCell>
