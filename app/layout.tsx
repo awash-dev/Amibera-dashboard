@@ -1,3 +1,4 @@
+// layout.tsx
 "use client";
 import React from "react";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -19,15 +20,14 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// Define your metadata
-export const siteMetadata = {
+// Define your metadata directly as a top-level export
+export const metadata: Metadata = {
   title: {
     default: "Awash Shop - Your Online Marketplace", // Default title
-    template: "Awash Shop | Home", // Title template for individual pages
+    template: "%s | Awash Shop", // Template for individual pages (%s will be replaced by the page title)
   },
-
   icons: {
-    icon: "/icons.jpg",
+    icon: "/icons.jpg", // Path to your favicon file in the public directory
   },
 };
 
