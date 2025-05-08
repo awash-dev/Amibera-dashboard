@@ -1,12 +1,12 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import Sidebar from "@/components/Sidebar";
-import { useEffect, useState } from "react";
 import Login from "./page"; // Ensure this is your login page component
-import { useRouter, usePathname } from "next/navigation";
-import { Metadata } from "next"; // Import Metadata type
+import { useRouter, usePathname } from "next/navigation"; 
+import { metadata } from "./metadata"; // Import metadata from the server component
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,17 +17,6 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
-
-// Define your metadata directly as a top-level export
-export const metadata: Metadata = {
-  title: {
-    default: "Awash Shop - Your Online Marketplace", // Default title
-    template: "%s | Awash Shop", // Template for individual pages (%s will be replaced by the page title)
-  },
-  icons: {
-    icon: "/icons.jpg", // Path to your favicon file in the public directory
-  },
-};
 
 export default function RootLayout({
   children,
@@ -71,6 +60,9 @@ export default function RootLayout({
 
   return (
     <html lang="en">
+      <head>
+        
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
