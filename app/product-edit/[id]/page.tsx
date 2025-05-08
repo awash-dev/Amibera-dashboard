@@ -14,7 +14,7 @@ interface ProductFormData {
   price: string;
   category: string;
   description: string;
-  image: string[]; // Changed to string array since we're storing URLs
+  image: string | string[]; // Changed to string array since we're storing URLs
 }
 
 interface Category {
@@ -40,7 +40,7 @@ export default function UpdateProduct() {
 
   const categories: Category[] = [
     { value: "አልጋ", label: "አልጋ" },
-    { value: "ቲቪ �ታንድ", label: "ቲቪ ስታንድ" },
+    { value: "ቲቪ ታንድ", label: "ቲቪ ስታንድ" },
     { value: "ቁምሳጥን", label: "ቁምሳጥን" },
     { value: "ድሪሲንግ", label: "ድሪሲንግ" },
     { value: "መጅሊስ", label: "መጅሊስ" },
@@ -59,7 +59,11 @@ export default function UpdateProduct() {
           const productData = productSnapshot.data() as ProductFormData;
           setFormData(productData);
           if (productData.image && productData.image.length > 0) {
-            setImagePreviews(productData.image);
+            setImagePreviews(
+              Array.isArray(productData.image)
+                ? productData.image
+                : [productData.image]
+            );
           }
         } else {
           toast.error("Product not found");
@@ -105,7 +109,9 @@ export default function UpdateProduct() {
       // If it's an existing image, remove from formData
       setFormData((prev) => ({
         ...prev,
-        image: prev.image.filter((_, i) => i !== index),
+        image: Array.isArray(prev.image)
+          ? prev.image.filter((_, i) => i !== index)
+          : [],
       }));
     } else {
       // If it's a new image, remove from newImages
@@ -238,7 +244,7 @@ export default function UpdateProduct() {
 
           <div>
             <label className="block text-sm font-medium mb-1">Images</label>
-            {imagePreviews.length > 0 && (
+            {imagePreviews.length >= 0 && (
               <div className="flex flex-wrap gap-2 mb-4">
                 {imagePreviews.map((preview, index) => (
                   <div key={index} className="relative">
