@@ -25,45 +25,9 @@ export const metadata: Metadata = {
     default: "Awash Shop - Your Online Marketplace", // Default title
     template: "Awash Shop | Home", // Title template for individual pages
   },
-  description:
-    "Discover a wide range of products at Awash Shop, your trusted online marketplace. Browse electronics, fashion, home goods, and more!",
-  keywords: [
-    "Awash Shop",
-    "online shopping",
-    "marketplace",
-    "electronics",
-    "fashion",
-    "home goods",
-    "ferniture",
-    "clothing",
-  ], // Add relevant keywords
-  authors: [{ name: "Mohammed" }], // Optional: Add author information
-  openGraph: {
-    title: "Awash Shop - Your Online Marketplace",
-    description:
-      "Discover a wide range of products at Awash Shop, your trusted online marketplace. Browse electronics, fashion, home goods, and more!",
-    url: "Awash-dev.com", // Replace with your actual website URL
-    siteName: "Awash Shop",
-    images: [
-      {
-        url: "/icons.jpg", // Replace with the path to your logo image
-        width: 800,
-        height: 600,
-        alt: "Awash Shop Logo",
-      },
-    ],
-    locale: "en_US",
-    type: "website",
-  },
-  robots: {
-    index: true,
-    follow: true,
-    nocache: false,
-  },
-  // Add the favicon link here
+
   icons: {
-    icon: "/icons.jpg", // Assuming your favicon is in the public directory
-    apple: "/icons.jpg", // Optional: Apple touch icon
+    icon: "/icons.jpg",
   },
 };
 
