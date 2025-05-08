@@ -1,5 +1,3 @@
-// layout.tsx
-"use client";
 import React from "react";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
