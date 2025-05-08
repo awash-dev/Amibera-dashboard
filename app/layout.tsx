@@ -20,7 +20,7 @@ const geistMono = Geist_Mono({
 });
 
 // Define your metadata
-export const metadata: Metadata = {
+export const siteMetadata = {
   title: {
     default: "Awash Shop - Your Online Marketplace", // Default title
     template: "Awash Shop | Home", // Title template for individual pages
