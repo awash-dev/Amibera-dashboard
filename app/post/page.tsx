@@ -140,7 +140,7 @@ export default function CreateProduct() {
   }, [imagePreviews]);
 
   return (
-    <div className="container mx-auto pl-32 py-8 max-w-2xl">
+    <div className="container mx-auto  p-6 py-8 max-w-2xl">
       <h1 className="text-2xl font-bold mb-6">Create New Product</h1>
 
       <form onSubmit={handleSubmit} className="space-y-4">

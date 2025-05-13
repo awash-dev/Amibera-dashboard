@@ -237,7 +237,7 @@ export default function ProductList() {
   }
 
   return (
-    <div className="xl:pl-16 space-y-4 pt-6">
+    <div className=" p-6 space-y-4 ">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <h1 className="text-2xl font-bold">Product List</h1>
         <div className="flex items-center gap-2">
