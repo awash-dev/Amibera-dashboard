@@ -77,7 +77,7 @@ export default function ProductList() {
         price: doc.data().price || 0,
         category: doc.data().category || "",
         description: doc.data().description || "",
-        image: doc.data().image || "",
+        image: doc.data().image || "", // Default to an empty string
       }));
       setProducts(productList);
     } catch (error) {
@@ -161,7 +161,7 @@ export default function ProductList() {
   };
 
   const renderImageCells = (images: string | string[], productName: string) => {
-    const safeImages = Array.isArray(images) ? images : [images];
+    const safeImages = Array.isArray(images) ? images : [images]; // Ensure it's always an array
 
     if (safeImages.length === 0) {
       return <span className="text-xs text-gray-400">No images</span>;
@@ -172,7 +172,7 @@ export default function ProductList() {
         <Button
           variant="ghost"
           size="sm"
-          className="p-0 relative z-0" // Lower z-index for image container
+          className="p-0"
           onClick={() => openImageSlider(safeImages)}
         >
           <img
@@ -192,7 +192,7 @@ export default function ProductList() {
             key={`${productName}-${index}`}
             variant="ghost"
             size="sm"
-            className="p-0 relative group z-0" // Lower z-index for image container
+            className="p-0 relative group"
             onClick={() => openImageSlider(safeImages, index)}
           >
             <img
@@ -237,7 +237,7 @@ export default function ProductList() {
   }
 
   return (
-    <div className="p-6 space-y-4">
+    <div className=" p-6 space-y-4 ">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <h1 className="text-2xl font-bold">Product List</h1>
         <div className="flex items-center gap-2">
@@ -329,13 +329,9 @@ export default function ProductList() {
                   <TableCell>
                     {renderImageCells(product.image, product.name)}
                   </TableCell>
-                  <TableCell className="flex justify-end space-x-2">
+                  <TableCell className="flex justify-end space-x-2 z-50">
                     <Link href={`/product-edit/${product.id}`} passHref>
-                      <Button 
-                        size="sm" 
-                        variant="outline"
-                        className="relative z-20 opacity-100 hover:opacity-100" // Higher z-index and forced opacity
-                      >
+                      <Button size="sm" variant="outline">
                         <Edit2 className="h-4 w-4 mr-2" />
                         Edit
                       </Button>
@@ -350,4 +346,109 @@ export default function ProductList() {
                       <AlertDialogTrigger asChild>
                         <Button
                           size="sm"
-                          variant="destructive
+                          variant="destructive"
+                          disabled={deletingId === product.id}
+                        >
+                          <Trash2 className="h-4 w-4 mr-2" />
+                          {deletingId === product.id ? "Deleting..." : "Delete"}
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>
+                            Are you absolutely sure?
+                          </AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This action cannot be undone. This will permanently
+                            delete the product.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={() => handleDelete(product.id)}
+                          >
+                            Delete
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </div>
+
+      {/* Image Slider Modal */}
+      <Dialog open={isSliderOpen} onOpenChange={setIsSliderOpen}>
+        <DialogContent className="sm:max-w-[80vw] max-h-[90vh] flex flex-col">
+          <div className="relative flex-grow flex items-center justify-center">
+            {currentProductImages.length > 0 && (
+              <>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="absolute left-2 z-10"
+                  onClick={handlePrevImage}
+                >
+                  <ChevronLeft className="h-6 w-6" />
+                </Button>
+
+                <div className="relative w-full h-full flex items-center justify-center">
+                  <img
+                    src={currentProductImages[currentImageIndex]}
+                    alt={`Product image ${currentImageIndex + 1}`}
+                    className="max-w-full max-h-[70vh] object-contain"
+                    onError={(e) =>
+                      (e.currentTarget.src = "/placeholder-image.jpg")
+                    }
+                  />
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="absolute top-2 right-2"
+                    onClick={() =>
+                      downloadImage(currentProductImages[currentImageIndex])
+                    }
+                  >
+                    <Download className="h-5 w-5" />
+                  </Button>
+                </div>
+
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="absolute right-2 z-10"
+                  onClick={handleNextImage}
+                >
+                  <ChevronRight className="h-6 w-6" />
+                </Button>
+              </>
+            )}
+          </div>
+
+          {currentProductImages.length > 1 && (
+            <div className="flex justify-center gap-2 mt-4">
+              {currentProductImages.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentImageIndex(index)}
+                  className={`h-2 w-2 rounded-full ${
+                    index === currentImageIndex ? "bg-primary" : "bg-gray-300"
+                  }`}
+                  aria-label={`Go to image ${index + 1}`}
+                />
+              ))}
+            </div>
+          )}
+
+          <div className="text-center text-sm text-gray-500 mt-2">
+            Image {currentImageIndex + 1} of {currentProductImages.length}
+          </div>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}
