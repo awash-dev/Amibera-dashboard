@@ -400,7 +400,7 @@ export default function Dashboard() {
           onValueChange={setActiveTab}
           className="space-y-6"
         >
-          <TabsList className="sticky top-16 bg-background z-10 overflow-x-auto">
+          <TabsList className="sticky  bg-background z-10 overflow-x-auto">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="users">User List</TabsTrigger>
             <TabsTrigger value="products">Listed Products</TabsTrigger>
