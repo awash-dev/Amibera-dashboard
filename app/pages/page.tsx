@@ -371,13 +371,13 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <div className="p-6 space-y-4">
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+      <div className="p-4 md:p-6 space-y-4">
+        <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-5">
           {[...Array(5)].map((_, i) => (
             <Skeleton key={i} className="h-32 w-full" />
           ))}
         </div>
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-4 grid-cols-1 lg:grid-cols-2">
           {[...Array(2)].map((_, i) => (
             <Skeleton key={i} className="h-96 w-full" />
           ))}
@@ -390,17 +390,17 @@ export default function Dashboard() {
     <div className="flex flex-col min-h-screen overflow-hidden">
       <header className="bg-background border-b sticky top-0 z-10">
         <div className="container flex h-16 items-center justify-between px-4">
-          <h1 className="text-xl font-bold">Product Listing Dashboard</h1>
+          <h1 className="text-lg sm:text-xl font-bold">Product Listing Dashboard</h1>
         </div>
       </header>
 
-      <main className="flex-1 p-4 md:p-6 ">
+      <main className="flex-1 p-4 md:p-6 overflow-x-hidden">
         <Tabs
           value={activeTab}
           onValueChange={setActiveTab}
           className="space-y-6"
         >
-          <TabsList className="sticky top-16 bg-background z-10">
+          <TabsList className="sticky top-16 bg-background z-10 overflow-x-auto">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="users">User List</TabsTrigger>
             <TabsTrigger value="products">Listed Products</TabsTrigger>
@@ -408,15 +408,15 @@ export default function Dashboard() {
           </TabsList>
 
           <TabsContent value="overview" className="space-y-4">
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+            <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-5">
               <Card>
-                <CardHeader className="flex flex-row items-center justify-between   pb-2">
+                <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
                   <CardTitle className="text-sm font-medium">
                     Total Revenue
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">
+                  <div className="text-xl sm:text-2xl font-bold">
                     {stats.totalRevenue.toLocaleString()} Birr
                   </div>
                   <p className="text-xs text-muted-foreground">
@@ -446,7 +446,7 @@ export default function Dashboard() {
                   </svg>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{stats.totalOrders}</div>
+                  <div className="text-xl sm:text-2xl font-bold">{stats.totalOrders}</div>
                   <p className="text-xs text-muted-foreground">
                     Completed orders
                   </p>
@@ -474,7 +474,7 @@ export default function Dashboard() {
                   </svg>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">
+                  <div className="text-xl sm:text-2xl font-bold">
                     {stats.totalProducts}
                   </div>
                   <p className="text-xs text-muted-foreground">
@@ -504,7 +504,7 @@ export default function Dashboard() {
                   </svg>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">
+                  <div className="text-xl sm:text-2xl font-bold">
                     {stats.newListersThisMonth}
                   </div>
                   <p className="text-xs text-muted-foreground">
@@ -514,15 +514,15 @@ export default function Dashboard() {
               </Card>
             </div>
 
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-              <Card className="col-span-4">
-                <CardHeader className="flex flex-row items-center justify-between">
-                  <CardTitle>Growth Trends</CardTitle>
+            <div className="grid gap-4 grid-cols-1 lg:grid-cols-7">
+              <Card className="lg:col-span-4">
+                <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <CardTitle className="text-lg">Growth Trends</CardTitle>
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button
                         variant={"outline"}
-                        className="w-[240px] justify-start text-left font-normal"
+                        className="w-full sm:w-[240px] justify-start text-left font-normal"
                       >
                         <Calendar1Icon className="mr-2 h-4 w-4" />
                         {dateRange?.from ? (
@@ -554,172 +554,188 @@ export default function Dashboard() {
                   </Popover>
                 </CardHeader>
                 <CardContent className="pl-2">
-                  <ResponsiveContainer width="100%" height={350}>
-                    <LineChart data={trendData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                      <XAxis
-                        dataKey="date"
-                        tickFormatter={(date) =>
-                          new Date(date).toLocaleDateString("en-US", {
-                            month: "short",
-                            day: "numeric",
-                          })
-                        }
-                        stroke="#888888"
-                        tickMargin={10}
-                      />
-                      <YAxis stroke="#888888" tickMargin={10} />
-                      <Tooltip
-                        labelFormatter={(date) =>
-                          new Date(date).toLocaleDateString("en-US", {
-                            month: "long",
-                            day: "numeric",
-                            year: "numeric",
-                          })
-                        }
-                        contentStyle={{
-                          backgroundColor: "#ffffff",
-                          border: "1px solid #e2e8f0",
-                          borderRadius: "0.5rem",
-                          boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
-                        }}
-                      />
-                      <Legend
-                        wrapperStyle={{
-                          paddingTop: "20px",
-                        }}
-                      />
-                      <Line
-                        type="monotone"
-                        dataKey="users"
-                        stroke="#3b82f6"
-                        strokeWidth={2}
-                        name="Total Users"
-                        dot={{ r: 4, fill: "#3b82f6", strokeWidth: 2 }}
-                        activeDot={{ r: 6, stroke: "#3b82f6", strokeWidth: 2 }}
-                      />
-                      <Line
-                        type="monotone"
-                        dataKey="products"
-                        stroke="#10b981"
-                        strokeWidth={2}
-                        name="Total Products"
-                        dot={{ r: 4, fill: "#10b981", strokeWidth: 2 }}
-                        activeDot={{ r: 6, stroke: "#10b981", strokeWidth: 2 }}
-                      />
-                      <Line
-                        type="monotone"
-                        dataKey="orders"
-                        stroke="#f59e0b"
-                        strokeWidth={2}
-                        name="Total Orders"
-                        dot={{ r: 4, fill: "#f59e0b", strokeWidth: 2 }}
-                        activeDot={{ r: 6, stroke: "#f59e0b", strokeWidth: 2 }}
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
+                  <div className="h-[300px] sm:h-[350px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={trendData}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                        <XAxis
+                          dataKey="date"
+                          tickFormatter={(date) =>
+                            new Date(date).toLocaleDateString("en-US", {
+                              month: "short",
+                              day: "numeric",
+                            })
+                          }
+                          stroke="#888888"
+                          tickMargin={10}
+                        />
+                        <YAxis stroke="#888888" tickMargin={10} />
+                        <Tooltip
+                          labelFormatter={(date) =>
+                            new Date(date).toLocaleDateString("en-US", {
+                              month: "long",
+                              day: "numeric",
+                              year: "numeric",
+                            })
+                          }
+                          contentStyle={{
+                            backgroundColor: "#ffffff",
+                            border: "1px solid #e2e8f0",
+                            borderRadius: "0.5rem",
+                            boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+                          }}
+                        />
+                        <Legend
+                          wrapperStyle={{
+                            paddingTop: "20px",
+                          }}
+                        />
+                        <Line
+                          type="monotone"
+                          dataKey="users"
+                          stroke="#3b82f6"
+                          strokeWidth={2}
+                          name="Total Users"
+                          dot={{ r: 4, fill: "#3b82f6", strokeWidth: 2 }}
+                          activeDot={{ r: 6, stroke: "#3b82f6", strokeWidth: 2 }}
+                        />
+                        <Line
+                          type="monotone"
+                          dataKey="products"
+                          stroke="#10b981"
+                          strokeWidth={2}
+                          name="Total Products"
+                          dot={{ r: 4, fill: "#10b981", strokeWidth: 2 }}
+                          activeDot={{ r: 6, stroke: "#10b981", strokeWidth: 2 }}
+                        />
+                        <Line
+                          type="monotone"
+                          dataKey="orders"
+                          stroke="#f59e0b"
+                          strokeWidth={2}
+                          name="Total Orders"
+                          dot={{ r: 4, fill: "#f59e0b", strokeWidth: 2 }}
+                          activeDot={{ r: 6, stroke: "#f59e0b", strokeWidth: 2 }}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
                 </CardContent>
               </Card>
 
-              <Card className="col-span-3">
+              <Card className="lg:col-span-3">
                 <CardHeader>
-                  <CardTitle>Products by Category</CardTitle>
+                  <CardTitle className="text-lg">Products by Category</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <ResponsiveContainer width="100%" height={350}>
-                    <PieChart>
-                      <Pie
-                        data={categoryData}
-                        cx="50%"
-                        cy="50%"
-                        labelLine={false}
-                        outerRadius={80}
-                        fill="#8884d8"
-                        dataKey="value"
-                        label={({ name, percent }) =>
-                          `${name}: ${(percent * 100).toFixed(0)}%`
-                        }
-                      >
-                        {categoryData.map((entry, index) => (
-                          <Cell
-                            key={`cell-${index}`}
-                            fill={COLORS[index % COLORS.length]}
-                          />
-                        ))}
-                      </Pie>
-                      <Tooltip />
-                    </PieChart>
-                  </ResponsiveContainer>
+                  <div className="h-[300px] sm:h-[350px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie
+                          data={categoryData}
+                          cx="50%"
+                          cy="50%"
+                          labelLine={false}
+                          outerRadius={80}
+                          fill="#8884d8"
+                          dataKey="value"
+                          label={({ name, percent }) =>
+                            `${name}: ${(percent * 100).toFixed(0)}%`
+                          }
+                        >
+                          {categoryData.map((entry, index) => (
+                            <Cell
+                              key={`cell-${index}`}
+                              fill={COLORS[index % COLORS.length]}
+                            />
+                          ))}
+                        </Pie>
+                        <Tooltip />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </div>
                 </CardContent>
               </Card>
             </div>
 
-            <div className="grid gap-4 md:grid-cols-2">
+            <div className="grid gap-4 grid-cols-1 lg:grid-cols-2">
               <Card>
                 <CardHeader>
-                  <CardTitle>Recent Orders</CardTitle>
+                  <CardTitle className="text-lg">Recent Orders</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Customer</TableHead>
-                        <TableHead>Date</TableHead>
-                        <TableHead>Amount</TableHead>
-                        <TableHead>Status</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {orders.slice(0, 5).map((order) => (
-                        <TableRow key={order.id}>
-                          <TableCell>{order.customer.fullName}</TableCell>
-                          <TableCell>
-                            {new Date(order.createdAt).toLocaleDateString()}
-                          </TableCell>
-                          <TableCell>{order.amount.toFixed(2)} Birr</TableCell>
-                          <TableCell>
-                            <Badge
-                              variant={
-                                order.status === "Delivered"
-                                  ? "default"
-                                  : order.status === "Failed"
-                                  ? "secondary"
-                                  : "destructive"
-                              }
-                            >
-                              {order.status}
-                            </Badge>
-                          </TableCell>
+                  <div className="overflow-x-auto">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Customer</TableHead>
+                          <TableHead>Date</TableHead>
+                          <TableHead>Amount</TableHead>
+                          <TableHead>Status</TableHead>
                         </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
+                      </TableHeader>
+                      <TableBody>
+                        {orders.slice(0, 5).map((order) => (
+                          <TableRow key={order.id}>
+                            <TableCell className="whitespace-nowrap">
+                              {order.customer.fullName}
+                            </TableCell>
+                            <TableCell className="whitespace-nowrap">
+                              {new Date(order.createdAt).toLocaleDateString()}
+                            </TableCell>
+                            <TableCell className="whitespace-nowrap">
+                              {order.amount.toFixed(2)} Birr
+                            </TableCell>
+                            <TableCell>
+                              <Badge
+                                variant={
+                                  order.status === "Delivered"
+                                    ? "default"
+                                    : order.status === "Failed"
+                                    ? "secondary"
+                                    : "destructive"
+                                }
+                              >
+                                {order.status}
+                              </Badge>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
                 </CardContent>
               </Card>
 
               <Card>
                 <CardHeader>
-                  <CardTitle>Recently Listed Products</CardTitle>
+                  <CardTitle className="text-lg">Recently Listed Products</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Product</TableHead>
-                        <TableHead>Price</TableHead>
-                        <TableHead>Category</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {products.slice(0, 5).map((product) => (
-                        <TableRow key={product.id}>
-                          <TableCell>{product.name}</TableCell>
-                          <TableCell>{product.price.toFixed(2)} Birr</TableCell>
-                          <TableCell>{product.category}</TableCell>
+                  <div className="overflow-x-auto">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Product</TableHead>
+                          <TableHead>Price</TableHead>
+                          <TableHead>Category</TableHead>
                         </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
+                      </TableHeader>
+                      <TableBody>
+                        {products.slice(0, 5).map((product) => (
+                          <TableRow key={product.id}>
+                            <TableCell className="whitespace-nowrap">{product.name}</TableCell>
+                            <TableCell className="whitespace-nowrap">
+                              {product.price.toFixed(2)} Birr
+                            </TableCell>
+                            <TableCell className="whitespace-nowrap">
+                              {product.category}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
                 </CardContent>
               </Card>
             </div>
@@ -728,64 +744,69 @@ export default function Dashboard() {
           <TabsContent value="users" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>Users</CardTitle>
+                <CardTitle className="text-lg">Users</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="flex items-center py-4">
+                <div className="flex flex-col sm:flex-row items-center py-4 gap-4">
                   <Input
                     placeholder="Search users by name or email..."
-                    className="max-w-sm"
+                    className="w-full sm:max-w-sm"
                     value={userSearchTerm}
                     onChange={(e) => setUserSearchTerm(e.target.value)}
                   />
                 </div>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Profile</TableHead>
-                      <TableHead>Username</TableHead>
-                      <TableHead>Email</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {filteredUsers.length > 0 ? (
-                      filteredUsers
-                        .sort(
-                          (a, b) =>
-                            new Date(b.createdAt).getTime() -
-                            new Date(a.createdAt).getTime()
-                        )
-                        .map((user) => (
-                          <TableRow key={user.id}>
-                            <TableCell>
-                              <div className="flex items-center gap-3">
-                                <img
-                                  src={user.profileImage}
-                                  alt={user.username}
-                                  className="h-10 w-10 rounded-full"
-                                  onError={(e) => {
-                                    (e.target as HTMLImageElement).src =
-                                      "/logo.jpg";
-                                  }}
-                                />
-                              </div>
-                            </TableCell>
-                            <TableCell className="font-medium">
-                              {user.username}
-                            </TableCell>
-                            <TableCell>{user.email}</TableCell>
-                            <TableCell>{formatDate(user.createdAt)} </TableCell>
-                          </TableRow>
-                        ))
-                    ) : (
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
                       <TableRow>
-                        <TableCell colSpan={5} className="text-center py-4">
-                          No users found
-                        </TableCell>
+                        <TableHead>Profile</TableHead>
+                        <TableHead>Username</TableHead>
+                        <TableHead>Email</TableHead>
+                        <TableHead>Joined</TableHead>
                       </TableRow>
-                    )}
-                  </TableBody>
-                </Table>
+                    </TableHeader>
+                    <TableBody>
+                      {filteredUsers.length > 0 ? (
+                        filteredUsers
+                          .sort(
+                            (a, b) =>
+                              new Date(b.createdAt).getTime() -
+                              new Date(a.createdAt).getTime()
+                          )
+                          .map((user) => (
+                            <TableRow key={user.id}>
+                              <TableCell>
+                                <div className="flex items-center gap-3">
+                                  <img
+                                    src={user.profileImage}
+                                    alt={user.username}
+                                    className="h-10 w-10 rounded-full"
+                                    onError={(e) => {
+                                      (e.target as HTMLImageElement).src =
+                                        "/logo.jpg";
+                                    }}
+                                  />
+                                </div>
+                              </TableCell>
+                              <TableCell className="font-medium whitespace-nowrap">
+                                {user.username}
+                              </TableCell>
+                              <TableCell className="whitespace-nowrap">{user.email}</TableCell>
+                              <TableCell className="whitespace-nowrap">
+                                {formatDate(user.createdAt)}
+                              </TableCell>
+                            </TableRow>
+                          ))
+                      ) : (
+                        <TableRow>
+                          <TableCell colSpan={4} className="text-center py-4">
+                            No users found
+                          </TableCell>
+                        </TableRow>
+                      )}
+                    </TableBody>
+                  </Table>
+                </div>
               </CardContent>
             </Card>
           </TabsContent>
@@ -793,13 +814,13 @@ export default function Dashboard() {
           <TabsContent value="products" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>Listed Products</CardTitle>
+                <CardTitle className="text-lg">Listed Products</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="flex items-center py-4">
+                <div className="flex flex-col sm:flex-row items-center py-4 gap-4">
                   <Input
                     placeholder="Search products..."
-                    className="max-w-sm"
+                    className="w-full sm:max-w-sm"
                     value={productSearchTerm}
                     onChange={(e) => setProductSearchTerm(e.target.value)}
                   />
@@ -807,7 +828,7 @@ export default function Dashboard() {
                     value={productCategoryFilter}
                     onValueChange={setProductCategoryFilter}
                   >
-                    <SelectTrigger className="ml-4 w-[180px]">
+                    <SelectTrigger className="w-full sm:w-[180px]">
                       <SelectValue placeholder="Filter by category" />
                     </SelectTrigger>
                     <SelectContent>
@@ -822,40 +843,44 @@ export default function Dashboard() {
                     </SelectContent>
                   </Select>
                 </div>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Product</TableHead>
-                      <TableHead> </TableHead>
-                      <TableHead>Price</TableHead>
-                      <TableHead>Category</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {filteredProducts.length > 0 ? (
-                      filteredProducts.map((product) => (
-                        <TableRow key={product.id}>
-                          <TableCell className="font-medium">
-                            {product.name}
-                          </TableCell>
-                          <TableCell>
-                            <div className="h-10 w-10 overflow-hidden rounded-md"></div>
-                          </TableCell>
-                          <TableCell>{product.price.toFixed(2)} Birr</TableCell>
-                          <TableCell>
-                            <Badge variant="outline">{product.category}</Badge>
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Product</TableHead>
+                        <TableHead>Image</TableHead>
+                        <TableHead>Price</TableHead>
+                        <TableHead>Category</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {filteredProducts.length > 0 ? (
+                        filteredProducts.map((product) => (
+                          <TableRow key={product.id}>
+                            <TableCell className="font-medium whitespace-nowrap">
+                              {product.name}
+                            </TableCell>
+                            <TableCell>
+                              <div className="h-10 w-10 overflow-hidden rounded-md"></div>
+                            </TableCell>
+                            <TableCell className="whitespace-nowrap">
+                              {product.price.toFixed(2)} Birr
+                            </TableCell>
+                            <TableCell>
+                              <Badge variant="outline">{product.category}</Badge>
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      ) : (
+                        <TableRow>
+                          <TableCell colSpan={4} className="text-center py-4">
+                            No products found
                           </TableCell>
                         </TableRow>
-                      ))
-                    ) : (
-                      <TableRow>
-                        <TableCell colSpan={4} className="text-center py-4">
-                          No products found
-                        </TableCell>
-                      </TableRow>
-                    )}
-                  </TableBody>
-                </Table>
+                      )}
+                    </TableBody>
+                  </Table>
+                </div>
               </CardContent>
             </Card>
           </TabsContent>
@@ -863,13 +888,13 @@ export default function Dashboard() {
           <TabsContent value="orders" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>Order History</CardTitle>
+                <CardTitle className="text-lg">Order History</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="flex items-center py-4">
+                <div className="flex flex-col sm:flex-row items-center py-4 gap-4">
                   <Input
                     placeholder="Search orders..."
-                    className="max-w-sm"
+                    className="w-full sm:max-w-sm"
                     value={orderSearchTerm}
                     onChange={(e) => setOrderSearchTerm(e.target.value)}
                   />
@@ -877,7 +902,7 @@ export default function Dashboard() {
                     value={orderStatusFilter}
                     onValueChange={setOrderStatusFilter}
                   >
-                    <SelectTrigger className="ml-4 w-[180px]">
+                    <SelectTrigger className="w-full sm:w-[180px]">
                       <SelectValue placeholder="Filter by status" />
                     </SelectTrigger>
                     <SelectContent>
@@ -896,7 +921,7 @@ export default function Dashboard() {
                         className="border rounded-lg overflow-hidden"
                       >
                         <div className="p-4 bg-gray-50 border-b">
-                          <div className="flex justify-between items-center">
+                          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
                             <div>
                               <h3 className="font-medium">Order #{order.id}</h3>
                               <p className="text-sm text-muted-foreground">
